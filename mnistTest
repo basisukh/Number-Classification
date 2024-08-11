@@ -1,0 +1,38 @@
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+from keras.models import load_model
+
+# Load the image
+image_path = '/Users/akalsukhbasi/Desktop/Java Files/csa/src/advtopics/test4.png'
+img = Image.open(image_path)
+
+# Convert to grayscale
+img = img.convert("L")
+
+# Resize to 28x28 pixels
+img = img.resize((28, 28))
+
+# Invert colors
+img = np.invert(np.array(img))
+
+# Normalize
+img = img / 255.0
+
+# Reshape to the required shape for the model
+img = img.reshape(1, 28, 28, 1)
+
+# Display the preprocessed image
+plt.imshow(img.reshape(28, 28), cmap='gray')
+plt.title('Preprocessed Image')
+plt.show()
+
+# Load the model
+model = load_model('mnist_model.h5')
+
+# Predict the digit
+prediction = model.predict(img)
+digit = np.argmax(prediction)
+
+print(f'Predicted Digit: {digit}')
+
